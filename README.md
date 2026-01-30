@@ -1,6 +1,9 @@
 # GitHub Webhook Receiver & Dashboard
+
 <img width="2548" height="1344" alt="Image" src="https://github.com/user-attachments/assets/f3b885ed-d57c-461c-84ad-8acf582f8f4e" />
+
 ![Image](https://github.com/user-attachments/assets/57fcf531-24a8-4bd7-b0be-a1a5d569655e)
+
 This project is a **Flask-based Webhook Receiver** that listens for GitHub repository events (Push, Pull Request, and Merge), stores specific payload data into **MongoDB**, and displays the activity on a real-time **polling UI**.
 
 ## 🚀 Project Architecture
