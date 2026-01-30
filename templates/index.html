@@ -1,6 +1,13 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <!--
+      Repository Dashboard HTML
+      - This page displays recent webhook events and aggregated stats.
+      - The frontend polls `/api/events` and `/api/stats` periodically
+        (see the script at the bottom) and renders the results into the DOM.
+      - Theme toggle persists preference in `localStorage`.
+    -->
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Repository Dashboard</title>
@@ -8,6 +15,7 @@
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
     />
+    <!-- Main stylesheet: CSS variables, layout, component styles -->
     <style>
       * {
         margin: 0;
@@ -393,6 +401,12 @@
     </style>
   </head>
   <body>
+    <!-- Page structure:
+         - .top-bar: header and theme toggle
+         - .stats-grid: summary cards (total, push, PR, merge)
+         - .events-card: chronological list of recent events
+         The JavaScript below updates the counts and the events list.
+    -->
     <div class="container">
       <div class="top-bar">
         <div class="header">
@@ -466,13 +480,19 @@
     </div>
 
     <script>
+      // JavaScript behavior summary:
+      // - Polls `STATS_URL` and `API_URL` every `POLL_INTERVAL` ms
+      // - Renders summary counts into stat cards and event items into #events-list
+      // - formatDate normalizes timestamps produced server-side
+      // - Theme toggle persists choice in localStorage
       const API_URL = "/api/events";
       const STATS_URL = "/api/stats";
-      const POLL_INTERVAL = 15000;
+      const POLL_INTERVAL = 15000; // milliseconds (15s)
 
       const themeToggle = document.getElementById("themeToggle");
       const themeText = document.getElementById("themeText");
 
+      // Theme toggle: persists `theme` in localStorage and toggles `dark-mode`
       const savedTheme = localStorage.getItem("theme") || "light";
       if (savedTheme === "dark") {
         document.body.classList.add("dark-mode");
@@ -486,6 +506,8 @@
         themeText.textContent = isDarkMode ? "Light" : "Dark";
       });
 
+      // Convert backend UTC timestamp string into a human-friendly format
+      // Input examples: "2026-01-30 12:34:56 UTC"
       function formatDate(dateString) {
         const date = new Date(dateString.replace(" UTC", "Z"));
         const day = date.getDate();
@@ -509,6 +531,7 @@
         return `${datePart} - ${timePart}`;
       }
 
+      // Fetch aggregated counts and update stat cards
       async function fetchStats() {
         try {
           const response = await fetch(STATS_URL);
@@ -524,6 +547,8 @@
         }
       }
 
+      // Fetch recent events and render them into #events-list
+      // Expected event objects have: action, author, from_branch, to_branch, timestamp
       async function fetchEvents() {
         try {
           const response = await fetch(API_URL);
@@ -605,9 +630,11 @@
         }
       }
 
+      // Initial load
       fetchStats();
       fetchEvents();
 
+      // Polling to keep the dashboard up-to-date
       setInterval(fetchStats, POLL_INTERVAL);
       setInterval(fetchEvents, POLL_INTERVAL);
     </script>
