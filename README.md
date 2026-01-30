@@ -1,6 +1,5 @@
 # GitHub Webhook Receiver & Dashboard
-<!-- Uploading "Loom_FreeScreenVideoRecordingSoftware_Loom-30January2026-ezgif.com-video-to-gif-converter.gif"... -->
-This project is a **Flask-based Webhook Receiver** that listens for GitHub repository events (Push, Pull Request, and Merge), stores specific payload data into **MongoDB**, and displays the activity on a real-time **polling UI**.
+![Image](https://github.com/user-attachments/assets/57fcf531-24a8-4bd7-b0be-a1a5d569655e)This project is a **Flask-based Webhook Receiver** that listens for GitHub repository events (Push, Pull Request, and Merge), stores specific payload data into **MongoDB**, and displays the activity on a real-time **polling UI**.
 
 ## 🚀 Project Architecture
 
